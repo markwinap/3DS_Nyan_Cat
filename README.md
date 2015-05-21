@@ -34,9 +34,6 @@ Error: New error will loading sound or loading new texture. ( meed to work on it
 
 4/25/5015 - Added 3D (popping effect) Thanks Technicmaster0 for the guidance.
 
-Download (3dsx and elf) (old version)
-
-https://www.dropbox.com/s/e400my3xm0zw74r/nyan_cat.zip?dl=0
 
 Pending
 
