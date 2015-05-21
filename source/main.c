@@ -6,6 +6,8 @@
 #include <3ds.h>
 #include <sf2d.h>
 
+
+//Audio Stuff WIP
 u8* buffer;
 u32 size;
 #define SAMPLERATE 32000
@@ -245,7 +247,7 @@ int main()
 	csndInit();//start Audio Lib
 
 	play_state = 1;
-	cat_selected = rand() % 15;
+	cat_selected = rand() % 15; //Initiate with a random cat selected
 	last_time = osGetTime(); //get current time
 	last_time2 = osGetTime(); //get current time 2
 
@@ -259,14 +261,13 @@ int main()
 			if (hidKeysDown() & KEY_DUP){
 					cat_selected++;
 					play_state = 1;
-					sf2d_pool_reset();
+
 
 			}
 
 			if (hidKeysDown() & KEY_DDOWN){
 					cat_selected--;
 					play_state = 1;
-					sf2d_pool_reset();
 				
 			}
 
@@ -284,6 +285,8 @@ int main()
 			if (cat_selected == 15 && play_state == 1){
 				sf2d_set_clear_color(RGBA8(0x0C, 0x0C, 0x0C, 0xFF));//Background
 				
+
+				//audio_stop Not sure if is a timing issue but i have to linearfree and flush audio twice 
 				audio_stop(file);
 				audio_stop(file);
 				
