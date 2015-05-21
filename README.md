@@ -10,6 +10,16 @@ Controls: Use left or right to change Nyan Cat.
 
 Setup: Place audio folder and 3dsx file in the same folder. Or siply decompress the zip and place the folder inside your 3ds folder.
 
+Dowload (Audio Folder ONLY)
+https://www.dropbox.com/s/7w4qvvvnhmsil4a/audio.zip?dl=0
+
+Dowload (3dsx and elf )
+//Pending
+
+Donwload(3dsx , elf and audio folder)
+
+https://www.dropbox.com/s/zc3tz3cw9i6bqis/nyan_cat.zip?dl=0
+
 Update
 
 5/13/2015 - Change Sound loading method to load from file. Change audio sample rate to 32000, remixed most of the song to better fit audio loop mode. ( i hope you like it)
@@ -17,10 +27,6 @@ Update
 Added gb, technyancolor, jazz, j5, pikanyan, zombie, mummy, jamaicnyan, america, slomo, sad, tacnayn.
 
 Error: New error will loading sound or loading new texture. ( meed to work on it) exit app and restart to resolve issue.
-
-Donwload(3dsx and elf)
-
-https://www.dropbox.com/s/zc3tz3cw9i6bqis/nyan_cat.zip?dl=0
 
 4/29/2015 - Finally, fixed sound issue on exit, thanks "elhobbs" for the info. Set max value for counter to 99999999.9 Secs.
 
