@@ -6,12 +6,27 @@ im new and im still learning, but i was finally able to code something that i li
 
 Smile please :) and use this app at work to help you relieve your stress.
 
-Controls: Use left or right to change Nyan Cat.
+#### Controls
 
-Setup: Place audio folder and 3dsx file in the same folder. 
+Use left or right to change Nyan Cat.
 
+#### Setup
 
-Downloads
+Place audio folder and 3dsx file in the same folder. 
+
+#### Directory structure
+
+- sdmc:\
+  - 3ds\
+    - nyan_cat\
+      - nyan_cat.3dsx
+      - nyan_cat.smdh
+      - audio\
+        - america_raw.bin
+        - dub_raw.bin
+        - ...
+
+#### Downloads
 
 Download (Audio Folder ONLY) - 5/19/2015
 
@@ -25,7 +40,7 @@ Download(3dsx , elf and audio folder) - 5/13/2015
 
 https://www.dropbox.com/s/zc3tz3cw9i6bqis/nyan_cat.zip?dl=0
 
-Update
+#### Updates
 
 5/13/2015 - Change Sound loading method to load from file. Change audio sample rate to 32000, remixed most of the song to better fit audio loop mode. ( i hope you like it)
 
@@ -38,7 +53,7 @@ Error: New error will loading sound or loading new texture. ( meed to work on it
 4/25/5015 - Added 3D (popping effect) Thanks Technicmaster0 for the guidance.
 
 
-Pending
+#### Pending
 
     Add more Nyan Cat versions
     Add some starts when 3d is enabled
