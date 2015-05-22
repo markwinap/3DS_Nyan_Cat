@@ -10,15 +10,15 @@ Controls: Use left or right to change Nyan Cat.
 
 Setup: Place audio folder and 3dsx file in the same folder. Or siply decompress the zip and place the folder inside your 3ds folder.
 
-Download (Audio Folder ONLY) 5/19/2015
+Download (Audio Folder ONLY) - 5/19/2015
 
 https://www.dropbox.com/s/7w4qvvvnhmsil4a/audio.zip?dl=0
 
-Download (3dsx and elf ) 5/20/2015
+Download (3dsx and elf ) - 5/20/2015
 
 https://www.dropbox.com/s/xs541y9i2iz2q10/nyan_cat.zip?dl=0
 
-Download(3dsx , elf and audio folder) 5/13/2015
+Download(3dsx , elf and audio folder) - 5/13/2015
 
 https://www.dropbox.com/s/zc3tz3cw9i6bqis/nyan_cat.zip?dl=0
 
