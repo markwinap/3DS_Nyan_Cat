@@ -12,7 +12,7 @@ Setup: Place audio folder and 3dsx file in the same folder.
 
 Directory structure:
 SD_CARD:\
---------------3ds\
+--------------3ds\n
 -------------------nyan_cat\
 --------------------------------nyan_cat.3dsx
 --------------------------------nyan_cat.smdh
