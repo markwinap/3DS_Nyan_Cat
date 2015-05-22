@@ -10,25 +10,6 @@ Controls: Use left or right to change Nyan Cat.
 
 Setup: Place audio folder and 3dsx file in the same folder. 
 
-Directory structure:
-SD_CARD:\
-
---------------3ds
-
--------------------nyan_cat\
-
---------------------------------nyan_cat.3dsx
-
---------------------------------nyan_cat.smdh
-
---------------------------------audio\
-
-----------------------------------------america_raw.bin
-
-----------------------------------------dub_raw.bin
-
-----------------------------------------...
-
 
 Downloads
 
