@@ -1,4 +1,4 @@
-# 3DS_Nyan_Cat_Port
+# 3DS_Nyan_Cat
 
 Team
 
