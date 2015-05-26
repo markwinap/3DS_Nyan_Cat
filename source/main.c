@@ -227,7 +227,7 @@ int main()
 	sf2d_set_vblank_wait(1);
 	sf2d_set_clear_color(RGBA8(0x0F, 0x4D, 0x8F, 0xFF));//Background
 
-	//sf2d_set_3D(1);//Enable 3D
+	sf2d_set_3D(1);//Enable 3D
 
 	sf2d_texture *font = sf2d_create_texture_mem_RGBA8(font_img.pixel_data, font_img.width, font_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
 	sf2d_texture *seconds = sf2d_create_texture_mem_RGBA8(seconds_img.pixel_data, seconds_img.width, seconds_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
@@ -864,10 +864,6 @@ int main()
 				}
 
 
-
-
-
-
 				//Draw cat normal
 
 			if (cat_selected == 1 || cat_selected == 2 || cat_selected == 3 || cat_selected == 4 || cat_selected == 5 || cat_selected == 6 || cat_selected == 7 || cat_selected == 8 || cat_selected == 9 || cat_selected == 11 || cat_selected == 12 || cat_selected == 14 || cat_selected == 15) {
@@ -1060,17 +1056,500 @@ int main()
 					}
 				}
 
+			sf2d_end_frame();
+
+			///Start GFX_RIGHT EYE
+			sf2d_start_frame(GFX_TOP, GFX_RIGHT);
 
 
+			if (cat_selected == 1 || cat_selected == 2 || cat_selected == 6 || cat_selected == 8 || cat_selected == 9 || cat_selected == 10 || cat_selected == 14){
+
+				if (rainbow_frame <= 5){
+					draw_rainbow(rainposx - right_eye, rainposy);
+					draw_rainbow((rainposx - 32) - right_eye, rainposy - 4);
+					draw_rainbow((rainposx - 64) - right_eye, rainposy);
+					draw_rainbow((rainposx - 96) - right_eye, rainposy + 4); // FIX
+					draw_rainbow((rainposx - 128) - right_eye, rainposy + 8);
+					draw_rainbow((rainposx - 160) - right_eye, rainposy + 4); // FIX
+					draw_rainbow((rainposx - 192) - right_eye, rainposy);
+				}
+				if (rainbow_frame > 5 && rainbow_frame <= 10){
+					draw_rainbow(rainposx - right_eye, rainposy + 8);
+					draw_rainbow((rainposx - 32) - right_eye, rainposy + 12);
+					draw_rainbow((rainposx - 64) - right_eye, rainposy + 8);
+					draw_rainbow((rainposx - 96) - right_eye, rainposy + 4); // FIX
+					draw_rainbow((rainposx - 128) - right_eye, rainposy);
+					draw_rainbow((rainposx - 160) - right_eye, rainposy + 4); // FIX
+					draw_rainbow((rainposx - 192) - right_eye, rainposy + 8);
+				}
+				if (rainbow_frame > 10){
+					draw_rainbow(rainposx - right_eye, rainposy);
+					draw_rainbow((rainposx - 32) - right_eye, rainposy - 4);
+					draw_rainbow((rainposx - 64) - right_eye, rainposy);
+					draw_rainbow((rainposx - 96) - right_eye, rainposy + 4); // FIX
+					draw_rainbow((rainposx - 128) - right_eye, rainposy + 8);
+					draw_rainbow((rainposx - 160) - right_eye, rainposy + 4); // FIX
+					draw_rainbow((rainposx - 192) - right_eye, rainposy);
+
+
+					rainbow_frame = 1;
+				}
+			}
+
+
+			if (cat_selected == 3){
+
+				if (rainbow_frame <= 5){
+					draw_rainbow_gb(rainposx - right_eye, rainposy);
+					draw_rainbow_gb((rainposx - 32) - right_eye, rainposy - 4);
+					draw_rainbow_gb((rainposx - 64) - right_eye, rainposy);
+					draw_rainbow_gb((rainposx - 96) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_gb((rainposx - 128) - right_eye, rainposy + 8);
+					draw_rainbow_gb((rainposx - 160) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_gb((rainposx - 192) - right_eye, rainposy);
+				}
+				if (rainbow_frame > 5 && rainbow_frame <= 10){
+					draw_rainbow_gb(rainposx - right_eye, rainposy + 8);
+					draw_rainbow_gb((rainposx - 32) - right_eye, rainposy + 12);
+					draw_rainbow_gb((rainposx - 64) - right_eye, rainposy + 8);
+					draw_rainbow_gb((rainposx - 96) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_gb((rainposx - 128) - right_eye, rainposy);
+					draw_rainbow_gb((rainposx - 160) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_gb((rainposx - 192) - right_eye, rainposy + 8);
+				}
+				if (rainbow_frame > 10){
+					draw_rainbow_gb(rainposx - right_eye, rainposy);
+					draw_rainbow_gb((rainposx - 32) - right_eye, rainposy - 4);
+					draw_rainbow_gb((rainposx - 64) - right_eye, rainposy);
+					draw_rainbow_gb((rainposx - 96) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_gb((rainposx - 128) - right_eye, rainposy + 8);
+					draw_rainbow_gb((rainposx - 160) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_gb((rainposx - 192) - right_eye, rainposy);
+
+
+					rainbow_frame = 1;
+				}
+			}
+
+			if (cat_selected == 4){
+
+				if (rainbow_frame <= 5){
+					draw_rainbow_jamaicnyan(rainposx - right_eye, rainposy);
+					draw_rainbow_jamaicnyan((rainposx - 32) - right_eye, rainposy - 4);
+					draw_rainbow_jamaicnyan((rainposx - 64) - right_eye, rainposy);
+					draw_rainbow_jamaicnyan((rainposx - 96) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_jamaicnyan((rainposx - 128) - right_eye, rainposy + 8);
+					draw_rainbow_jamaicnyan((rainposx - 160) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_jamaicnyan((rainposx - 192), rainposy);
+				}
+				if (rainbow_frame > 5 && rainbow_frame <= 10){
+					draw_rainbow_jamaicnyan(rainposx - right_eye, rainposy + 8);
+					draw_rainbow_jamaicnyan((rainposx - 32) - right_eye, rainposy + 12);
+					draw_rainbow_jamaicnyan((rainposx - 64) - right_eye, rainposy + 8);
+					draw_rainbow_jamaicnyan((rainposx - 96) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_jamaicnyan((rainposx - 128) - right_eye, rainposy);
+					draw_rainbow_jamaicnyan((rainposx - 160) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_jamaicnyan((rainposx - 192) - right_eye, rainposy + 8);
+				}
+				if (rainbow_frame > 10){
+					draw_rainbow_jamaicnyan(rainposx - right_eye, rainposy);
+					draw_rainbow_jamaicnyan((rainposx - 32) - right_eye, rainposy - 4);
+					draw_rainbow_jamaicnyan((rainposx - 64) - right_eye, rainposy);
+					draw_rainbow_jamaicnyan((rainposx - 96) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_jamaicnyan((rainposx - 128) - right_eye, rainposy + 8);
+					draw_rainbow_jamaicnyan((rainposx - 160) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_jamaicnyan((rainposx - 192) - right_eye, rainposy);
+
+
+					rainbow_frame = 1;
+				}
+			}
+
+			if (cat_selected == 7){
+
+				if (rainbow_frame <= 5){
+					draw_rainbow_america(rainposx - right_eye, rainposy);
+					draw_rainbow_america((rainposx - 32) - right_eye, rainposy - 4);
+					draw_rainbow_america((rainposx - 64) - right_eye, rainposy);
+					draw_rainbow_america((rainposx - 96) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_america((rainposx - 128) - right_eye, rainposy + 8);
+					draw_rainbow_america((rainposx - 160) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_america((rainposx - 192) - right_eye, rainposy);
+				}
+				if (rainbow_frame > 5 && rainbow_frame <= 10){
+					draw_rainbow_america(rainposx - right_eye, rainposy + 8);
+					draw_rainbow_america((rainposx - 32) - right_eye, rainposy + 12);
+					draw_rainbow_america((rainposx - 64) - right_eye, rainposy + 8);
+					draw_rainbow_america((rainposx - 96) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_america((rainposx - 128) - right_eye, rainposy);
+					draw_rainbow_america((rainposx - 160) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_america((rainposx - 192) - right_eye, rainposy + 8);
+				}
+				if (rainbow_frame > 10){
+					draw_rainbow_america(rainposx - right_eye, rainposy);
+					draw_rainbow_america((rainposx - 32) - right_eye, rainposy - 4);
+					draw_rainbow_america((rainposx - 64) - right_eye, rainposy);
+					draw_rainbow_america((rainposx - 96) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_america((rainposx - 128) - right_eye, rainposy + 8);
+					draw_rainbow_america((rainposx - 160) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_america((rainposx - 192) - right_eye, rainposy);
+
+
+					rainbow_frame = 1;
+				}
+			}
+
+			if (cat_selected == 5){
+
+				if (rainbow_frame <= 5){
+					draw_rainbow_pikanyan(rainposx - right_eye, rainposy);
+					draw_rainbow_pikanyan((rainposx - 32) - right_eye, rainposy - 4);
+					draw_rainbow_pikanyan((rainposx - 64) - right_eye, rainposy);
+					draw_rainbow_pikanyan((rainposx - 96) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_pikanyan((rainposx - 128) - right_eye, rainposy + 8);
+					draw_rainbow_pikanyan((rainposx - 160) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_pikanyan((rainposx - 192) - right_eye, rainposy);
+				}
+				if (rainbow_frame > 5 && rainbow_frame <= 10){
+					draw_rainbow_pikanyan(rainposx - right_eye, rainposy + 8);
+					draw_rainbow_pikanyan((rainposx - 32) - right_eye, rainposy + 12);
+					draw_rainbow_pikanyan((rainposx - 64) - right_eye, rainposy + 8);
+					draw_rainbow_pikanyan((rainposx - 96) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_pikanyan((rainposx - 128) - right_eye, rainposy);
+					draw_rainbow_pikanyan((rainposx - 160) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_pikanyan((rainposx - 192) - right_eye, rainposy + 8);
+				}
+				if (rainbow_frame > 10){
+					draw_rainbow_pikanyan(rainposx - right_eye, rainposy);
+					draw_rainbow_pikanyan((rainposx - 32) - right_eye, rainposy - 4);
+					draw_rainbow_pikanyan((rainposx - 64) - right_eye, rainposy);
+					draw_rainbow_pikanyan((rainposx - 96) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_pikanyan((rainposx - 128) - right_eye, rainposy + 8);
+					draw_rainbow_pikanyan((rainposx - 160) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_pikanyan((rainposx - 192) - right_eye, rainposy);
+
+
+					rainbow_frame = 1;
+				}
+			}
+
+			if (cat_selected == 12){
+
+				if (rainbow_frame <= 5){
+					draw_rainbow_jazz(rainposx - right_eye, rainposy);
+					draw_rainbow_jazz((rainposx - 32) - right_eye, rainposy - 4);
+					draw_rainbow_jazz((rainposx - 64) - right_eye, rainposy);
+					draw_rainbow_jazz((rainposx - 96) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_jazz((rainposx - 128) - right_eye, rainposy + 8);
+					draw_rainbow_jazz((rainposx - 160) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_jazz((rainposx - 192) - right_eye, rainposy);
+				}
+				if (rainbow_frame > 5 && rainbow_frame <= 10){
+					draw_rainbow_jazz(rainposx - right_eye, rainposy + 8);
+					draw_rainbow_jazz((rainposx - 32) - right_eye, rainposy + 12);
+					draw_rainbow_jazz((rainposx - 64) - right_eye, rainposy + 8);
+					draw_rainbow_jazz((rainposx - 96) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_jazz((rainposx - 128) - right_eye, rainposy);
+					draw_rainbow_jazz((rainposx - 160) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_jazz((rainposx - 192) - right_eye, rainposy + 8);
+				}
+				if (rainbow_frame > 10){
+					draw_rainbow_jazz(rainposx - right_eye, rainposy);
+					draw_rainbow_jazz((rainposx - 32) - right_eye, rainposy - 4);
+					draw_rainbow_jazz((rainposx - 64) - right_eye, rainposy);
+					draw_rainbow_jazz((rainposx - 96) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_jazz((rainposx - 128) - right_eye, rainposy + 8);
+					draw_rainbow_jazz((rainposx - 160) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_jazz((rainposx - 192) - right_eye, rainposy);
+
+
+					rainbow_frame = 1;
+				}
+			}
+
+			if (cat_selected == 13){
+
+				if (rainbow_frame <= 5){
+					draw_rainbow_tacnayn((rainposx - 20) - right_eye, rainposy);
+					draw_rainbow_tacnayn((rainposx + 15) - right_eye, rainposy - 4);
+					draw_rainbow_tacnayn((rainposx + 50) - right_eye, rainposy);
+					draw_rainbow_tacnayn((rainposx + 85) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_tacnayn((rainposx + 120) - right_eye, rainposy + 8);
+					draw_rainbow_tacnayn((rainposx + 155) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_tacnayn((rainposx + 190) - right_eye, rainposy);
+				}
+				if (rainbow_frame > 5 && rainbow_frame <= 10){
+					draw_rainbow_tacnayn((rainposx - 20) - right_eye, rainposy + 8);
+					draw_rainbow_tacnayn((rainposx + 15) - right_eye, rainposy + 12);
+					draw_rainbow_tacnayn((rainposx + 50) - right_eye, rainposy + 8);
+					draw_rainbow_tacnayn((rainposx + 85) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_tacnayn((rainposx + 120) - right_eye, rainposy);
+					draw_rainbow_tacnayn((rainposx + 155) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_tacnayn((rainposx + 190) - right_eye, rainposy + 8);
+				}
+				if (rainbow_frame > 10){
+					draw_rainbow_tacnayn((rainposx - 20) - right_eye, rainposy);
+					draw_rainbow_tacnayn((rainposx + 15) - right_eye, rainposy - 4);
+					draw_rainbow_tacnayn((rainposx + 50) - right_eye, rainposy);
+					draw_rainbow_tacnayn((rainposx + 85) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_tacnayn((rainposx + 120) - right_eye, rainposy + 8);
+					draw_rainbow_tacnayn((rainposx + 155) - right_eye, rainposy + 4); // FIX
+					draw_rainbow_tacnayn((rainposx + 190) - right_eye, rainposy);
+
+					rainbow_frame = 1;
+				}
+			}
+
+			if (cat_selected == 15){
+
+				if (rainbow_frame == 1){
+					draw_rainbow_dub((rainposx + 15) - right_eye, rainposy - 2, 4, 6, 5, 2, 4, 1);
+				}
+				if (rainbow_frame == 2){
+					draw_rainbow_dub((rainposx + 15) - right_eye, rainposy - 2, 4, 6, 5, 2, 4, 1);
+				}
+				if (rainbow_frame == 3){
+					draw_rainbow_dub((rainposx + 15) - right_eye, rainposy - 2, 4, 1, 3, 3, 5, 2);
+				}
+				if (rainbow_frame == 4){
+					draw_rainbow_dub((rainposx + 15) - right_eye, rainposy - 2, 3, 0, 4, 4, 4, 3);
+				}
+				if (rainbow_frame == 5){
+					draw_rainbow_dub((rainposx + 15) - right_eye, rainposy - 2, 5, 1, 6, 3, 3, 6);
+				}
+				if (rainbow_frame == 6){
+					draw_rainbow_dub((rainposx + 15) - right_eye, rainposy - 2, 1, 2, 5, 2, 2, 5);
+				}
+				if (rainbow_frame == 7){
+					draw_rainbow_dub((rainposx + 15) - right_eye, rainposy - 2, 2, 3, 5, 3, 1, 6);
+
+				}
+				if (rainbow_frame == 8){
+					draw_rainbow_dub((rainposx + 15) - right_eye, rainposy - 2, 4, 2, 4, 4, 1, 6);
+
+				}
+				if (rainbow_frame == 9){
+					draw_rainbow_dub((rainposx + 15) - right_eye, rainposy - 2, 5, 4, 3, 3, 2, 4);
+
+				}
+				if (rainbow_frame == 10){
+					draw_rainbow_dub((rainposx + 15) - right_eye, rainposy - 2, 6, 5, 4, 2, 3, 3);
+
+				}
+				if (rainbow_frame == 11){
+					draw_rainbow_dub((rainposx + 15) - right_eye, rainposy - 2, 6, 3, 6, 1, 1, 2);
+
+				}
+				if (rainbow_frame == 12){
+					draw_rainbow_dub((rainposx + 15) - right_eye, rainposy - 2, 5, 4, 3, 3, 2, 4);
+
+				}
+				if (rainbow_frame == 13){
+
+					draw_rainbow_dub((rainposx + 15) - right_eye, rainposy - 2, 4, 6, 5, 2, 4, 1);
+					rainbow_frame = 1;
+				}
+
+
+			}
+
+
+
+
+			if (cat_selected == 10){
+				if (cat_frame == 1){
+					sf2d_draw_texture_part(tex2, catposx - right_eye, catposy, 0, 0, 130, 80);
+				}
+				if (cat_frame == 2){
+					sf2d_draw_texture_part(tex2, catposx - right_eye, catposy, 0, 0, 130, 80);
+				}
+				if (cat_frame == 3){
+					sf2d_draw_texture_part(tex2, catposx - right_eye, catposy, 130, 0, 130, 80);
+				}
+				if (cat_frame == 4){
+					sf2d_draw_texture_part(tex2, catposx - right_eye, catposy, 130, 0, 130, 80);
+				}
+				if (cat_frame == 5){
+					sf2d_draw_texture_part(tex2, catposx - right_eye, catposy, 260, 0, 130, 80);
+				}
+				if (cat_frame == 6){
+					sf2d_draw_texture_part(tex2, catposx - right_eye, catposy, 260, 0, 130, 80);
+				}
+				if (cat_frame == 7){
+					sf2d_draw_texture_part(tex2, catposx - right_eye, catposy, 390, 0, 130, 80);
+				}
+				if (cat_frame == 8){
+					sf2d_draw_texture_part(tex2, catposx - right_eye, catposy, 390, 0, 130, 80);
+				}
+				if (cat_frame == 9){
+					sf2d_draw_texture_part(tex2, catposx - right_eye, catposy, 520, 0, 130, 80);
+				}
+				if (cat_frame == 10){
+					sf2d_draw_texture_part(tex2, catposx - right_eye, catposy, 520, 0, 130, 80);
+				}
+				if (cat_frame == 11){
+					sf2d_draw_texture_part(tex2, catposx - right_eye, catposy, 650, 0, 130, 80);
+				}
+				if (cat_frame == 12){
+					sf2d_draw_texture_part(tex2, catposx - right_eye, catposy, 650, 0, 130, 80);
+				}
+				if (cat_frame == 13){
+					sf2d_draw_texture_part(tex2, catposx - right_eye, catposy, 0, 0, 130, 80);
+
+					cat_frame = 1;
+				}
+			}
+
+			if (cat_selected == 13) {
+				if (cat_frame == 1){
+					sf2d_draw_texture_part(tex2, (catposx - 114) - right_eye, catposy, 0, 0, 130, 80);
+				}
+				if (cat_frame == 2){
+					sf2d_draw_texture_part(tex2, (catposx - 114) - right_eye, catposy, 130, 0, 130, 80);
+				}
+				if (cat_frame == 3){
+					sf2d_draw_texture_part(tex2, (catposx - 114) - right_eye, catposy, 260, 0, 130, 80);
+				}
+				if (cat_frame == 4){
+					sf2d_draw_texture_part(tex2, (catposx - 114) - right_eye, catposy, 390, 0, 130, 80);
+				}
+				if (cat_frame == 5){
+					sf2d_draw_texture_part(tex2, (catposx - 114) - right_eye, catposy, 520, 0, 130, 80);
+				}
+				if (cat_frame == 6){
+					sf2d_draw_texture_part(tex2, (catposx - 114) - right_eye, catposy, 650, 0, 130, 80);
+				}
+				if (cat_frame == 7){
+					sf2d_draw_texture_part(tex2, (catposx - 114) - right_eye, catposy, 0, 0, 130, 80);
+
+					cat_frame = 1;
+				}
+			}
+
+
+			//Draw cat normal
+
+			if (cat_selected == 1 || cat_selected == 2 || cat_selected == 3 || cat_selected == 4 || cat_selected == 5 || cat_selected == 6 || cat_selected == 7 || cat_selected == 8 || cat_selected == 9 || cat_selected == 11 || cat_selected == 12 || cat_selected == 14 || cat_selected == 15) {
+				if (cat_frame == 1){
+					sf2d_draw_texture_part(tex2, catposx - right_eye, catposy, 0, 0, 130, 80);
+				}
+				if (cat_frame == 2){
+					sf2d_draw_texture_part(tex2, catposx - right_eye, catposy, 130, 0, 130, 80);
+				}
+				if (cat_frame == 3){
+					sf2d_draw_texture_part(tex2, catposx - right_eye, catposy, 260, 0, 130, 80);
+				}
+				if (cat_frame == 4){
+					sf2d_draw_texture_part(tex2, catposx - right_eye, catposy, 390, 0, 130, 80);
+				}
+				if (cat_frame == 5){
+					sf2d_draw_texture_part(tex2, catposx - right_eye, catposy, 520, 0, 130, 80);
+				}
+				if (cat_frame == 6){
+					sf2d_draw_texture_part(tex2, catposx - right_eye, catposy, 650, 0, 130, 80);
+				}
+				if (cat_frame == 7){
+					sf2d_draw_texture_part(tex2, catposx - right_eye, catposy, 0, 0, 130, 80);
+
+					cat_frame = 1;
+				}
+			}
+
+
+
+
+			///stars
+
+
+			if (cat_selected == 13) {
+				if (star_frame == 1){
+					sf2d_draw_texture(tex1, star_pos1, star_pos2);
+					sf2d_draw_texture(tex1, star_pos3, star_pos4);
+					sf2d_draw_texture(tex1, star_pos5, star_pos6);
+					sf2d_draw_texture(tex1, star_pos7, star_pos8);
+				}
+
+				if (star_frame == 2){
+					sf2d_draw_texture(tex1, star_pos1 + 10, star_pos2);
+					sf2d_draw_texture(tex1, star_pos3 + 10, star_pos4);
+					sf2d_draw_texture(tex1, star_pos5 + 10, star_pos6);
+					sf2d_draw_texture(tex1, star_pos7 + 10, star_pos8);
+				}
+
+				if (star_frame == 3){
+					sf2d_draw_texture(tex1, star_pos1 + 20, star_pos2);
+					sf2d_draw_texture(tex1, star_pos3 + 20, star_pos4);
+					sf2d_draw_texture(tex1, star_pos5 + 20, star_pos6);
+					sf2d_draw_texture(tex1, star_pos7 + 20, star_pos8);
+				}
+
+				if (star_frame == 4){
+					sf2d_draw_texture(tex1, star_pos1 + 30, star_pos2);
+					sf2d_draw_texture(tex1, star_pos3 + 30, star_pos4);
+					sf2d_draw_texture(tex1, star_pos5 + 30, star_pos6);
+					sf2d_draw_texture(tex1, star_pos7 + 30, star_pos8);
+				}
+
+				if (star_frame == 5){
+					star_frame = 1;
+					star_pos1 = rand() % topx;
+					star_pos2 = rand() % topy;
+					star_pos3 = rand() % topx;
+					star_pos4 = rand() % topy;
+					star_pos5 = rand() % topx;
+					star_pos6 = rand() % topy;
+					star_pos7 = rand() % topx;
+					star_pos8 = rand() % topy;
+				}
+
+			}
+
+
+			//Drawnormal stars
+
+			if (cat_selected == 1 || cat_selected == 2 || cat_selected == 3 || cat_selected == 4 || cat_selected == 5 || cat_selected == 6 || cat_selected == 7 || cat_selected == 8 || cat_selected == 9 || cat_selected == 10 || cat_selected == 11 || cat_selected == 12 || cat_selected == 14 || cat_selected == 15){
+				if (star_frame == 1){
+
+					sf2d_draw_texture_part(tex1, star_pos1, star_pos2, 0, 0, 14, 14);
+					sf2d_draw_texture_part(tex1, star_pos3, star_pos3, 0, 0, 14, 14);
+					sf2d_draw_texture_part(tex1, star_pos5, star_pos6, 0, 0, 14, 14);
+					sf2d_draw_texture_part(tex1, star_pos7, star_pos8, 0, 0, 14, 14);
+				}
+				if (star_frame == 2){
+					sf2d_draw_texture_part(tex1, star_pos1 - 5, star_pos2, 14, 0, 14, 14);
+					sf2d_draw_texture_part(tex1, star_pos3 - 5, star_pos4, 14, 0, 14, 14);
+					sf2d_draw_texture_part(tex1, star_pos5 - 5, star_pos6, 14, 0, 14, 14);
+					sf2d_draw_texture_part(tex1, star_pos7 - 5, star_pos8, 14, 0, 14, 14);
+				}
+				if (star_frame == 3){
+					sf2d_draw_texture_part(tex1, star_pos1 - 10, star_pos2, 28, 0, 14, 14);
+					sf2d_draw_texture_part(tex1, star_pos3 - 10, star_pos4, 28, 0, 14, 14);
+					sf2d_draw_texture_part(tex1, star_pos5 - 10, star_pos6, 28, 0, 14, 14);
+					sf2d_draw_texture_part(tex1, star_pos7 - 10, star_pos8, 28, 0, 14, 14);
+				}
+				if (star_frame == 4){
+					sf2d_draw_texture_part(tex1, star_pos1 - 15, star_pos2, 42, 0, 14, 14);
+					sf2d_draw_texture_part(tex1, star_pos3 - 15, star_pos4, 42, 0, 14, 14);
+					sf2d_draw_texture_part(tex1, star_pos5 - 15, star_pos6, 42, 0, 14, 14);
+					sf2d_draw_texture_part(tex1, star_pos7 - 15, star_pos8, 42, 0, 14, 14);
+				}
+				if (star_frame == 5){
+					star_frame = 1;
+					star_pos1 = rand() % topx;
+					star_pos2 = rand() % topy;
+					star_pos3 = rand() % topx;
+					star_pos4 = rand() % topy;
+					star_pos5 = rand() % topx;
+					star_pos6 = rand() % topy;
+					star_pos7 = rand() % topx;
+					star_pos8 = rand() % topy;
+				}
+			}
 			sf2d_end_frame();
 
 
-
+			///BOTTOM SCREEN
 			sf2d_start_frame(GFX_BOTTOM, GFX_LEFT);
-
-
-
-
 			///stars
 
 				if (cat_selected == 13) {
