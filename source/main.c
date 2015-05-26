@@ -11,7 +11,6 @@
 u8* buffer;
 u32 size;
 #define SAMPLERATE 32000
-u32 *file;
 
 static u64 last_time = 0;
 static u64 last_time2 = 0;
@@ -47,6 +46,9 @@ int numy = 100;
 
 int cat_selected = 1;
 int play_state = 0;
+
+sf2d_texture *tex2;
+sf2d_texture *tex1;
 
 //int other = 0;
 //static u64 new_time3 = 0;
@@ -209,11 +211,10 @@ static void draw_rainbow_pikanyan(int rainx, int rainy);
 static void draw_rainbow_jamaicnyan(int rainx, int rainy);
 static void draw_rainbow(int rainx, int rainy);
 static void draw_rainbow_gb(int rainx, int rainy);
-static void draw_number(int num, int numx, int numy);
+static void draw_number(const sf2d_texture *mmm, int num, int numx, int numy);
 
 static void audio_load(const char *audio);
-static void audio_stop(u32 *file);
-
+static void audio_stop(void);
 
 int main()
 {
@@ -227,20 +228,9 @@ int main()
 	sf2d_set_clear_color(RGBA8(0x0F, 0x4D, 0x8F, 0xFF));//Background
 
 	//sf2d_set_3D(1);//Enable 3D
-	//sf2d_texture *tex2 = sf2d_create_texture_mem_RGBA8(citra_img.pixel_data, citra_img.width, citra_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
-
-	sf2d_texture *tex1 = sf2d_create_texture_mem_RGBA8(star_img.pixel_data, star_img.width, star_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
-
-
-	sf2d_texture *tex2 = sf2d_create_texture_mem_RGBA8(technyancolor_img.pixel_data, technyancolor_img.width, technyancolor_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
-
 
 	sf2d_texture *font = sf2d_create_texture_mem_RGBA8(font_img.pixel_data, font_img.width, font_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
-
-
 	sf2d_texture *seconds = sf2d_create_texture_mem_RGBA8(seconds_img.pixel_data, seconds_img.width, seconds_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
-
-
 	sf2d_texture *nyaned = sf2d_create_texture_mem_RGBA8(nyaned_img.pixel_data, nyaned_img.width, nyaned_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
 
 
@@ -254,27 +244,59 @@ int main()
 	
 
 		while (aptMainLoop()) {
-
 			hidScanInput();
 			if (hidKeysDown() & KEY_START) break;
 
+			if (hidKeysDown() & KEY_L){
+				cat_selected = rand() % 15;
+				audio_stop();
+				audio_stop();
+				play_state = 1;
+			}
+			if (hidKeysDown() & KEY_R){
+				cat_selected = rand() % 15;
+				audio_stop();
+				audio_stop();
+				play_state = 1;
+			}
+
 			if (hidKeysDown() & KEY_DUP){
-					cat_selected++;
+				audio_stop();
+				audio_stop();
+				cat_selected = cat_selected + 2;
 					play_state = 1;
-
-
 			}
 
 			if (hidKeysDown() & KEY_DDOWN){
-					cat_selected--;
-					play_state = 1;
-				
+				audio_stop();
+				audio_stop();
+				cat_selected = cat_selected -2;
+					play_state = 1;	
 			}
 
-			if (cat_selected == 16){
+			if (hidKeysDown() & KEY_DLEFT){
+				audio_stop();
+				audio_stop();
+				cat_selected--;
+				play_state = 1;
+			}
+
+			if (hidKeysDown() & KEY_DRIGHT){
+				audio_stop();
+				audio_stop();
+				cat_selected++;
+				play_state = 1;
+			}
+			if (hidKeysDown() & KEY_A){
+				cat_selected = rand() % 15;
+				audio_stop();
+				audio_stop();
+				play_state = 1;
+			}
+			if (cat_selected >= 16){
 				cat_selected = 1;
 			}
-			if (cat_selected == 0){
+			if (cat_selected <= 0){
 				cat_selected = 15;
 			}
 
@@ -285,20 +307,15 @@ int main()
 			if (cat_selected == 15 && play_state == 1){
 				sf2d_set_clear_color(RGBA8(0x0C, 0x0C, 0x0C, 0xFF));//Background
 				
-
-				//audio_stop Not sure if is a timing issue but i have to linearfree and flush audio twice 
-				audio_stop(file);
-				audio_stop(file);
-				
+				sf2d_free_texture(tex1);
 				sf2d_free_texture(tex2);
 
-
 				
-				sf2d_texture *tex2 = sf2d_create_texture_mem_RGBA8(dub_img.pixel_data, dub_img.width, dub_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
+				tex2 = sf2d_create_texture_mem_RGBA8(dub_img.pixel_data, dub_img.width, dub_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
+				tex1 = sf2d_create_texture_mem_RGBA8(star_img.pixel_data, star_img.width, star_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
+
 
 				audio_load("audio/dub_raw.bin");
-
-
 				play_state = 0;
 			}
 
@@ -306,16 +323,12 @@ int main()
 			//technyancolor_img
 			if (cat_selected == 14 && play_state == 1){
 				sf2d_set_clear_color(RGBA8(0x0C, 0x0C, 0x0C, 0xFF));//Background
-				audio_stop(file);
-				audio_stop(file);
-				sf2d_free_texture(tex2);
+
 				sf2d_free_texture(tex1);
+				sf2d_free_texture(tex2);
 
-				sf2d_texture *tex1 = sf2d_create_texture_mem_RGBA8(star_img.pixel_data, star_img.width, star_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
-
-
-				sf2d_texture *tex2 = sf2d_create_texture_mem_RGBA8(technyancolor_img.pixel_data, technyancolor_img.width, technyancolor_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
-
+				tex1 = sf2d_create_texture_mem_RGBA8(star_img.pixel_data, star_img.width, star_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
+				tex2 = sf2d_create_texture_mem_RGBA8(technyancolor_img.pixel_data, technyancolor_img.width, technyancolor_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
 
 				audio_load("audio/technyancolor_raw.bin");
 
@@ -329,19 +342,12 @@ int main()
 
 			if (cat_selected == 13 && play_state == 1){
 				sf2d_set_clear_color(RGBA8(0x77, 0x00, 0x0D, 0xFF));//Background
-				audio_stop(file);
-				audio_stop(file);
-				sf2d_free_texture(tex2);
+
 				sf2d_free_texture(tex1);
-
+				sf2d_free_texture(tex2);
 				
-
-
-				sf2d_texture *tex1 = sf2d_create_texture_mem_RGBA8(skull_img.pixel_data, skull_img.width, skull_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
-
-
-				sf2d_texture *tex2 = sf2d_create_texture_mem_RGBA8(tacnayn_img.pixel_data, tacnayn_img.width, tacnayn_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
-
+				tex1 = sf2d_create_texture_mem_RGBA8(skull_img.pixel_data, skull_img.width, skull_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
+				tex2 = sf2d_create_texture_mem_RGBA8(tacnayn_img.pixel_data, tacnayn_img.width, tacnayn_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
 
 				audio_load("audio/tacnayn_raw.bin");
 
@@ -353,15 +359,12 @@ int main()
 
 			if (cat_selected == 12 && play_state == 1){
 					sf2d_set_clear_color(RGBA8(0x43, 0x16, 0x43, 0xFF));//Background
-					audio_stop(file);
-					audio_stop(file);
-					sf2d_free_texture(tex2);
+
 					sf2d_free_texture(tex1);
+					sf2d_free_texture(tex2);
 
-					sf2d_texture *tex1 = sf2d_create_texture_mem_RGBA8(star_img.pixel_data, star_img.width, star_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
-
-					sf2d_texture *tex2 = sf2d_create_texture_mem_RGBA8(jazz_img.pixel_data, jazz_img.width, jazz_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
-
+					tex1 = sf2d_create_texture_mem_RGBA8(star_img.pixel_data, star_img.width, star_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
+					tex2 = sf2d_create_texture_mem_RGBA8(jazz_img.pixel_data, jazz_img.width, jazz_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
 
 					audio_load("audio/jazz_raw.bin");
 
@@ -374,14 +377,12 @@ int main()
 
 			if (cat_selected == 11 && play_state == 1){
 				sf2d_set_clear_color(RGBA8(0x00, 0x16, 0x1E, 0xFF));//Background
-				audio_stop(file);
-				audio_stop(file);
+
+				sf2d_free_texture(tex1);
 				sf2d_free_texture(tex2);
 
-
-
-				sf2d_texture *tex2 = sf2d_create_texture_mem_RGBA8(sad_img.pixel_data, sad_img.width, sad_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
-
+				tex1 = sf2d_create_texture_mem_RGBA8(star_img.pixel_data, star_img.width, star_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
+				tex2 = sf2d_create_texture_mem_RGBA8(sad_img.pixel_data, sad_img.width, sad_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
 
 				audio_load("audio/sad_raw.bin");
 
@@ -392,12 +393,12 @@ int main()
 			// slomo
 			if (cat_selected == 10 && play_state == 1){
 				sf2d_set_clear_color(RGBA8(0x0F, 0x4D, 0x8F, 0xFF));//Background
-				audio_stop(file);
-				audio_stop(file);
+
+				sf2d_free_texture(tex1);
 				sf2d_free_texture(tex2);
 
-				sf2d_texture *tex2 = sf2d_create_texture_mem_RGBA8(cat2_img.pixel_data, cat2_img.width, cat2_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
-
+				tex1 = sf2d_create_texture_mem_RGBA8(star_img.pixel_data, star_img.width, star_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
+				tex2 = sf2d_create_texture_mem_RGBA8(cat2_img.pixel_data, cat2_img.width, cat2_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
 
 				audio_load("audio/slomo_raw.bin");
 
@@ -409,12 +410,13 @@ int main()
 
 			//zombie_img
 			if (cat_selected == 9 && play_state == 1){
-				audio_stop(file);
-				audio_stop(file);
+				sf2d_set_clear_color(RGBA8(0x0F, 0x4D, 0x8F, 0xFF));//Background
+
+				sf2d_free_texture(tex1);
 				sf2d_free_texture(tex2);
-
-				sf2d_texture *tex2 = sf2d_create_texture_mem_RGBA8(zombie_img.pixel_data, zombie_img.width, zombie_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
-
+				
+				tex1 = sf2d_create_texture_mem_RGBA8(star_img.pixel_data, star_img.width, star_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
+				tex2 = sf2d_create_texture_mem_RGBA8(zombie_img.pixel_data, zombie_img.width, zombie_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
 
 				audio_load("audio/original_raw.bin");
 
@@ -427,14 +429,15 @@ int main()
 
 			//grumpy_img
 			if (cat_selected == 8 && play_state == 1){
-				audio_stop(file);
-				audio_stop(file);
+				sf2d_set_clear_color(RGBA8(0x0F, 0x4D, 0x8F, 0xFF));//Background
+
+				sf2d_free_texture(tex1);
 				sf2d_free_texture(tex2);
 
-				sf2d_texture *tex2 = sf2d_create_texture_mem_RGBA8(grumpy_img.pixel_data, grumpy_img.width, grumpy_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
+				tex1 = sf2d_create_texture_mem_RGBA8(star_img.pixel_data, star_img.width, star_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
+				tex2 = sf2d_create_texture_mem_RGBA8(grumpy_img.pixel_data, grumpy_img.width, grumpy_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
 
 				audio_load("audio/original_raw.bin");
-
 
 				play_state = 0;
 
@@ -442,16 +445,15 @@ int main()
 
 			//america_img
 			if (cat_selected == 7 && play_state == 1){
-				audio_stop(file);
-				audio_stop(file);
+				sf2d_set_clear_color(RGBA8(0x0F, 0x4D, 0x8F, 0xFF));//Background
+
+				sf2d_free_texture(tex1);
 				sf2d_free_texture(tex2);
 
-				
-				sf2d_texture *tex2 = sf2d_create_texture_mem_RGBA8(america_img.pixel_data, america_img.width, america_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
+				tex1 = sf2d_create_texture_mem_RGBA8(star_img.pixel_data, star_img.width, star_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
+				tex2 = sf2d_create_texture_mem_RGBA8(america_img.pixel_data, america_img.width, america_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
 
 				audio_load("audio/america_raw.bin");
-
-
 
 				play_state = 0;
 
@@ -459,17 +461,15 @@ int main()
 
 			//j5_img
 			if (cat_selected == 6 && play_state == 1){
-				audio_stop(file);
-				audio_stop(file);
+				sf2d_set_clear_color(RGBA8(0x0F, 0x4D, 0x8F, 0xFF));//Background
+
+				sf2d_free_texture(tex1);
 				sf2d_free_texture(tex2);
 
-
-				
-				sf2d_texture *tex2 = sf2d_create_texture_mem_RGBA8(j5_img.pixel_data, j5_img.width, j5_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
-
+				tex1 = sf2d_create_texture_mem_RGBA8(star_img.pixel_data, star_img.width, star_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
+				tex2 = sf2d_create_texture_mem_RGBA8(j5_img.pixel_data, j5_img.width, j5_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
 
 				audio_load("audio/j5_raw.bin");
-
 				play_state = 0;
 
 			}
@@ -477,16 +477,15 @@ int main()
 
 			//pikanyan_img
 			if (cat_selected == 5 && play_state == 1){
-				audio_stop(file);
-				audio_stop(file);
+				sf2d_set_clear_color(RGBA8(0x0F, 0x4D, 0x8F, 0xFF));//Background
+
+				sf2d_free_texture(tex1);
 				sf2d_free_texture(tex2);
 
-				sf2d_texture *tex2 = sf2d_create_texture_mem_RGBA8(pikanyan_img.pixel_data, pikanyan_img.width, pikanyan_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
-
+				tex1 = sf2d_create_texture_mem_RGBA8(star_img.pixel_data, star_img.width, star_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
+				tex2 = sf2d_create_texture_mem_RGBA8(pikanyan_img.pixel_data, pikanyan_img.width, pikanyan_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
 
 				audio_load("audio/pikanyan_raw.bin");
-
-
 				play_state = 0;
 
 			}
@@ -496,18 +495,15 @@ int main()
 
 			//jamaicnyan
 			if (cat_selected == 4 && play_state == 1){
-				audio_stop(file);
-				audio_stop(file);
+				sf2d_set_clear_color(RGBA8(0x0F, 0x4D, 0x8F, 0xFF));//Background
+
+				sf2d_free_texture(tex1);
 				sf2d_free_texture(tex2);
 
-
-				
-				sf2d_texture *tex2 = sf2d_create_texture_mem_RGBA8(jamaicnyan_img.pixel_data, jamaicnyan_img.width, jamaicnyan_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
-
+				tex1 = sf2d_create_texture_mem_RGBA8(star_img.pixel_data, star_img.width, star_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
+				tex2 = sf2d_create_texture_mem_RGBA8(jamaicnyan_img.pixel_data, jamaicnyan_img.width, jamaicnyan_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
 
 				audio_load("audio/jamaicnyan_raw.bin");
-
-
 				play_state = 0;
 
 			}
@@ -515,50 +511,43 @@ int main()
 
 			//gb
 			if (cat_selected == 3 && play_state == 1){
-				audio_stop(file);
-				audio_stop(file);
+				sf2d_set_clear_color(RGBA8(0x0F, 0x4D, 0x8F, 0xFF));//Background
+
+				sf2d_free_texture(tex1);
 				sf2d_free_texture(tex2);
 
-				sf2d_texture *tex2 = sf2d_create_texture_mem_RGBA8(gb_img.pixel_data, gb_img.width, gb_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
-
+				tex1 = sf2d_create_texture_mem_RGBA8(star_img.pixel_data, star_img.width, star_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
+				tex2 = sf2d_create_texture_mem_RGBA8(gb_img.pixel_data, gb_img.width, gb_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
 
 				audio_load("audio/gb_raw.bin");
-				
-
 				play_state = 0;
 
 			}
 			//mummy
 			if (cat_selected == 2 && play_state == 1){
-				audio_stop(file);
-				audio_stop(file);
+				sf2d_set_clear_color(RGBA8(0x0F, 0x4D, 0x8F, 0xFF));//Background
+
+				sf2d_free_texture(tex1);
 				sf2d_free_texture(tex2);
 
-
-				sf2d_texture *tex2 = sf2d_create_texture_mem_RGBA8(mummy_img.pixel_data, mummy_img.width, mummy_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
-
-
-				audio_load("audio/original_raw.bin");
-
+				tex1 = sf2d_create_texture_mem_RGBA8(star_img.pixel_data, star_img.width, star_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
+				tex2 = sf2d_create_texture_mem_RGBA8(mummy_img.pixel_data, mummy_img.width, mummy_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
 				
-
+				audio_load("audio/original_raw.bin");
 				play_state = 0;
 			}
 
 
 			if (cat_selected == 1 && play_state == 1){
 				sf2d_set_clear_color(RGBA8(0x0F, 0x4D, 0x8F, 0xFF));//Background
-				audio_stop(file);
-				audio_stop(file);
 
+				sf2d_free_texture(tex1);
 				sf2d_free_texture(tex2);
 
-				sf2d_texture *tex2 = sf2d_create_texture_mem_RGBA8(cat2_img.pixel_data, cat2_img.width, cat2_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
-
+				tex1 = sf2d_create_texture_mem_RGBA8(star_img.pixel_data, star_img.width, star_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
+				tex2 = sf2d_create_texture_mem_RGBA8(cat2_img.pixel_data, cat2_img.width, cat2_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
 
 				audio_load("audio/original_raw.bin");
-
-
 				play_state = 0;
 
 			}
@@ -1174,84 +1163,85 @@ int main()
 
 
 				if (counter_frame < 100){
-					draw_number(counter_frame % 10, numx + 5, numy);
+					draw_number(font, counter_frame % 10, numx + 5, numy);
 					sf2d_draw_texture_part(font, numx, numy, 308, 0, 22, 27); //point and center
-					draw_number(counter_frame / 10 % 10, numx - 17, numy);
+					draw_number(font, counter_frame / 10 % 10, numx - 17, numy);
 				}
 				else if (counter_frame < 1000){
-					draw_number(counter_frame % 10, numx + 23, numy);
+					draw_number(font, counter_frame % 10, numx + 23, numy);
 					sf2d_draw_texture_part(font, numx + 17, numy, 308, 0, 22, 27); //point
-					draw_number(counter_frame / 10 % 10, numx, numy);//center
-					draw_number(counter_frame / 100 % 10, numx - 17, numy);
+					draw_number(font, counter_frame / 10 % 10, numx, numy);//center
+					draw_number(font, counter_frame / 100 % 10, numx - 17, numy);
 				}
 				else if (counter_frame < 10000){
-					draw_number(counter_frame % 10, numx + 23, numy);
+					draw_number(font, counter_frame % 10, numx + 23, numy);
 					sf2d_draw_texture_part(font, numx + 17, numy, 308, 0, 22, 27); //point
-					draw_number(counter_frame / 10 % 10, numx, numy);//center
-					draw_number(counter_frame / 100 % 10, numx - 17, numy);
-					draw_number(counter_frame / 1000 % 10, numx - 34, numy);
+					draw_number(font, counter_frame / 10 % 10, numx, numy);//center
+					draw_number(font, counter_frame / 100 % 10, numx - 17, numy);
+					draw_number(font, counter_frame / 1000 % 10, numx - 34, numy);
 				}
 				else if (counter_frame < 100000){
-					draw_number(counter_frame % 10, numx + 39, numy);
+					draw_number(font, counter_frame % 10, numx + 39, numy);
 					sf2d_draw_texture_part(font, numx + 34, numy, 308, 0, 22, 27); //point
-					draw_number(counter_frame / 10 % 10, numx + 17, numy);
-					draw_number(counter_frame / 100 % 10, numx, numy);//center
-					draw_number(counter_frame / 1000 % 10, numx - 17, numy);
-					draw_number(counter_frame / 10000 % 10, numx - 34, numy);
+					draw_number(font, counter_frame / 10 % 10, numx + 17, numy);
+					draw_number(font, counter_frame / 100 % 10, numx, numy);//center
+					draw_number(font, counter_frame / 1000 % 10, numx - 17, numy);
+					draw_number(font, counter_frame / 10000 % 10, numx - 34, numy);
 				}
 				else if (counter_frame < 1000000){
-					draw_number(counter_frame % 10, numx + 39, numy);
+					draw_number(font, counter_frame % 10, numx + 39, numy);
 					sf2d_draw_texture_part(font, numx + 34, numy, 308, 0, 22, 27); //point
-					draw_number(counter_frame / 10 % 10, numx + 17, numy);
-					draw_number(counter_frame / 100 % 10, numx, numy);//center
-					draw_number(counter_frame / 1000 % 10, numx - 17, numy);
-					draw_number(counter_frame / 10000 % 10, numx - 34, numy);
-					draw_number(counter_frame / 100000 % 10, numx - 51, numy);
+					draw_number(font, counter_frame / 10 % 10, numx + 17, numy);
+					draw_number(font, counter_frame / 100 % 10, numx, numy);//center
+					draw_number(font, counter_frame / 1000 % 10, numx - 17, numy);
+					draw_number(font, counter_frame / 10000 % 10, numx - 34, numy);
+					draw_number(font, counter_frame / 100000 % 10, numx - 51, numy);
 				}
 				else if (counter_frame < 10000000){
-					draw_number(counter_frame % 10, numx + 56, numy);
+					draw_number(font, counter_frame % 10, numx + 56, numy);
 					sf2d_draw_texture_part(font, numx + 51, numy, 308, 0, 22, 27); //point
-					draw_number(counter_frame / 10 % 10, numx + 34, numy);
-					draw_number(counter_frame / 100 % 10, numx + 17, numy);
-					draw_number(counter_frame / 1000 % 10, numx, numy);//center
-					draw_number(counter_frame / 10000 % 10, numx - 17, numy);
-					draw_number(counter_frame / 100000 % 10, numx - 34, numy);
-					draw_number(counter_frame / 1000000 % 10, numx - 51, numy);
+					draw_number(font, counter_frame / 10 % 10, numx + 34, numy);
+					draw_number(font, counter_frame / 100 % 10, numx + 17, numy);
+					draw_number(font, counter_frame / 1000 % 10, numx, numy);//center
+					draw_number(font, counter_frame / 10000 % 10, numx - 17, numy);
+					draw_number(font, counter_frame / 100000 % 10, numx - 34, numy);
+					draw_number(font, counter_frame / 1000000 % 10, numx - 51, numy);
 				}
 				else if (counter_frame < 100000000){
-					draw_number(counter_frame % 10, numx + 56, numy);
+					draw_number(font, counter_frame % 10, numx + 56, numy);
 					sf2d_draw_texture_part(font, numx + 51, numy, 308, 0, 22, 27); //point
-					draw_number(counter_frame / 10 % 10, numx + 34, numy);
-					draw_number(counter_frame / 100 % 10, numx + 17, numy);
-					draw_number(counter_frame / 1000 % 10, numx, numy);//center
-					draw_number(counter_frame / 10000 % 10, numx - 17, numy);
-					draw_number(counter_frame / 100000 % 10, numx - 34, numy);
-					draw_number(counter_frame / 1000000 % 10, numx - 51, numy);
-					draw_number(counter_frame / 10000000 % 10, numx - 68, numy);
+					draw_number(font, counter_frame / 10 % 10, numx + 34, numy);
+					draw_number(font, counter_frame / 100 % 10, numx + 17, numy);
+					draw_number(font, counter_frame / 1000 % 10, numx, numy);//center
+					draw_number(font, counter_frame / 10000 % 10, numx - 17, numy);
+					draw_number(font, counter_frame / 100000 % 10, numx - 34, numy);
+					draw_number(font, counter_frame / 1000000 % 10, numx - 51, numy);
+					draw_number(font, counter_frame / 10000000 % 10, numx - 68, numy);
 				}
 				else if (counter_frame < 1000000000){
-					draw_number(counter_frame % 10, numx + 56, numy);
+					draw_number(font, counter_frame % 10, numx + 56, numy);
 					sf2d_draw_texture_part(font, numx + 51, numy, 308, 0, 22, 27); //point
-					draw_number(counter_frame / 10 % 10, numx + 34, numy);
-					draw_number(counter_frame / 100 % 10, numx + 17, numy);
-					draw_number(counter_frame / 1000 % 10, numx, numy);//center
-					draw_number(counter_frame / 10000 % 10, numx - 17, numy);
-					draw_number(counter_frame / 100000 % 10, numx - 34, numy);
-					draw_number(counter_frame / 1000000 % 10, numx - 51, numy);
-					draw_number(counter_frame / 10000000 % 10, numx - 68, numy);
-					draw_number(counter_frame / 100000000 % 10, numx - 85, numy);
+					draw_number(font, counter_frame / 10 % 10, numx + 34, numy);
+					draw_number(font, counter_frame / 100 % 10, numx + 17, numy);
+					draw_number(font, counter_frame / 1000 % 10, numx, numy);//center
+					draw_number(font, counter_frame / 10000 % 10, numx - 17, numy);
+					draw_number(font, counter_frame / 100000 % 10, numx - 34, numy);
+					draw_number(font, counter_frame / 1000000 % 10, numx - 51, numy);
+					draw_number(font, counter_frame / 10000000 % 10, numx - 68, numy);
+					draw_number(font, counter_frame / 100000000 % 10, numx - 85, numy);
 				}
 				sf2d_draw_texture(nyaned, 44, numy - 18); //nyaned
 				sf2d_draw_texture(seconds, 94, numy + 22); //seconds
 
 			sf2d_end_frame();
 			sf2d_swapbuffers();
+
 		}
 
 		//sound
 
-		audio_stop(file);
-		audio_stop(file);
+		audio_stop();
+		audio_stop();
 		csndExit();
 
 
@@ -1556,49 +1546,37 @@ void draw_rainbow_gb(int rainx, int rainy){
 }
 
 
-void draw_number(int num, int numx, int numy){
-
-	sf2d_texture *font = sf2d_create_texture_mem_RGBA8(font_img.pixel_data, font_img.width, font_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
-
+void draw_number(const sf2d_texture *mmm, int num, int numx, int numy){
 	if (num == 0){
-		sf2d_draw_texture_part(font, numx, numy, 0, 27, 22, 27);
-		sf2d_free_texture(font);
+		sf2d_draw_texture_part(mmm, numx, numy, 0, 27, 22, 27);
 	}
 	if (num == 1){
-		sf2d_draw_texture_part(font, numx, numy, 22, 27, 22, 27);
-		sf2d_free_texture(font);
+		sf2d_draw_texture_part(mmm, numx, numy, 22, 27, 22, 27);
 	}
 	if (num == 2){
-		sf2d_draw_texture_part(font, numx, numy, 44, 27, 22, 27);
-		sf2d_free_texture(font);
+		sf2d_draw_texture_part(mmm, numx, numy, 44, 27, 22, 27);
 	}
 	if (num == 3){
-		sf2d_draw_texture_part(font, numx, numy, 66, 27, 22, 27);
-		sf2d_free_texture(font);
+		sf2d_draw_texture_part(mmm, numx, numy, 66, 27, 22, 27);
 	}
 	if (num == 4){
-		sf2d_draw_texture_part(font, numx, numy, 88, 27, 22, 27);
-		sf2d_free_texture(font);
+		sf2d_draw_texture_part(mmm, numx, numy, 88, 27, 22, 27);
+		//sf2d_free_texture(font);
 	}
 	if (num == 5){
-		sf2d_draw_texture_part(font, numx, numy, 110, 27, 22, 27);
-		sf2d_free_texture(font);
+		sf2d_draw_texture_part(mmm, numx, numy, 110, 27, 22, 27);
 	}
 	if (num == 6){
-		sf2d_draw_texture_part(font, numx, numy, 132, 27, 22, 27);
-		sf2d_free_texture(font);
+		sf2d_draw_texture_part(mmm, numx, numy, 132, 27, 22, 27);
 	}
 	if (num == 7){
-		sf2d_draw_texture_part(font, numx, numy, 154, 27, 22, 27);
-		sf2d_free_texture(font);
+		sf2d_draw_texture_part(mmm, numx, numy, 154, 27, 22, 27);
 	}
 	if (num == 8){
-		sf2d_draw_texture_part(font, numx, numy, 176, 27, 22, 27);
-		sf2d_free_texture(font);
+		sf2d_draw_texture_part(mmm, numx, numy, 176, 27, 22, 27);
 	}
 	if (num == 9){
-		sf2d_draw_texture_part(font, numx, numy, 198, 27, 22, 27);
-		sf2d_free_texture(font);
+		sf2d_draw_texture_part(mmm, numx, numy, 198, 27, 22, 27);
 	}
 
 }
@@ -1606,10 +1584,7 @@ void draw_number(int num, int numx, int numy){
 
 void audio_load(const char *audio){
 
-	FILE *file;
-	
-	file = fopen(audio, "rb");
-
+	FILE *file = fopen(audio, "rb");
 
 	// seek to end of file
 	fseek(file, 0, SEEK_END);
@@ -1625,23 +1600,18 @@ void audio_load(const char *audio){
 
 	//read contents !
 	off_t bytesRead = fread(buffer, 1, size, file);
+	//u8 test = &buffer;
 
 	//close the file because we like being nice and tidy
 	fclose(file);
 
-	//memcpy(b, sfx_data, sfx_size);
-
-
-	csndPlaySound(8, SOUND_FORMAT_16BIT | SOUND_REPEAT, 32000, 1, 0,
-		buffer, buffer, size);
-	return file;
+	csndPlaySound(8, SOUND_FORMAT_16BIT | SOUND_REPEAT, 32000, 1, 0, buffer, buffer, size);
+	linearFree(buffer);
 }
-void audio_stop(u32 *file){
-
+void audio_stop(void){
 	csndExecCmds(true);
-	CSND_SetPlayState(8, 0);
+	CSND_SetPlayState(0x8, 0);
 	memset(buffer, 0, size);
 	GSPGPU_FlushDataCache(NULL, buffer, size);
 	linearFree(buffer);
-	free(file);
 }
