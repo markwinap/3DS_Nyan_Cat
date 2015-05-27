@@ -8,13 +8,13 @@ Smile please :) and use this app at work to help you relieve your stress.
 
 #### Controls
 
-D Pad Up: + 2 Cat Selection
-D Pad Down: - 2 Cat Selection
-D Pad Left: - 1 Cat Selection
-D Pad Right: + 1 Cat Selection
-A: Select Random Cat
-X: Select Last Cat
-Y: Select First Cat
+- D Pad Up: + 2 Cat Selection
+- D Pad Down: - 2 Cat Selection
+- D Pad Left: - 1 Cat Selection
+- D Pad Right: + 1 Cat Selection
+- A: Select Random Cat
+- X: Select Last Cat
+- Y: Select First Cat
 
 #### Setup
 
