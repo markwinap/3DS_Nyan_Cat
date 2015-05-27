@@ -37,7 +37,7 @@ Place audio folder and 3dsx file in the same folder.
 - Tacnayn
 - Technyancolor
 - Dub
-- Ballon
+- Balloon
 
 #### Directory structure
 
