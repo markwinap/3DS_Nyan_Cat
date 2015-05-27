@@ -8,11 +8,36 @@ Smile please :) and use this app at work to help you relieve your stress.
 
 #### Controls
 
-Use left or right to change Nyan Cat.
+D Pad Up: + 2 Cat Selection
+D Pad Down: - 2 Cat Selection
+D Pad Left: - 1 Cat Selection
+D Pad Right: + 1 Cat Selection
+A: Select Random Cat
+X: Select Last Cat
+Y: Select First Cat
 
 #### Setup
 
 Place audio folder and 3dsx file in the same folder. 
+
+#### Nyan Cats Order
+
+- Original
+- Mummy
+- GB
+- Jamaicnyan
+- Pikanyan
+- J5
+- America
+- Grumpy
+- Zombie
+- Slomo
+- Sad
+- Jazz
+- Tacnayn
+- Technyancolor
+- Dub
+- Ballon
 
 #### Directory structure
 
@@ -42,9 +67,9 @@ https://www.dropbox.com/s/zc3tz3cw9i6bqis/nyan_cat.zip?dl=0
 
 #### Updates
 
-5/13/2015 - Change Sound loading method to load from file. Change audio sample rate to 32000, remixed most of the song to better fit audio loop mode. ( i hope you like it)
+5/26/2015 - 3D slider is now working to select 3D depth . Added Ballon Nyan Cat. Re added 3D affect to all Nyan Cat. Start Random Cat on boot. Added new controls.
 
-Added gb, technyancolor, jazz, j5, pikanyan, zombie, mummy, jamaicnyan, america, slomo, sad, tacnayn.
+5/13/2015 - Change Sound loading method to load from file. Change audio sample rate to 32000, remixed most of the song to better fit audio loop mode. ( i hope you like it). Added gb, technyancolor, jazz, j5, pikanyan, zombie, mummy, jamaicnyan, america, slomo, sad, tacnayn.
 
 Error: New error will loading sound or loading new texture. ( meed to work on it) exit app and restart to resolve issue.
 

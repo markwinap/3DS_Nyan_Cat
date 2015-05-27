@@ -6,6 +6,8 @@
 #include <3ds.h>
 #include <sf2d.h>
 
+//Slider Stuff
+#define CONFIG_3D_SLIDERSTATE (*(float*)0x1FF81080)
 
 //Audio Stuff WIP
 u8* buffer;
@@ -19,7 +21,7 @@ static u64 new_time2 = 0;
 
 static u64 counter_frame = 0;
 
-int right_eye = 20;
+int interaxial = 20;
 
 int catposx = 192;
 int catposy = 68;
@@ -47,6 +49,9 @@ int numy = 100;
 int cat_selected = 1;
 int play_state = 0;
 
+int first_cat = 1;
+int last_cat = 16;
+
 sf2d_texture *tex2;
 sf2d_texture *tex1;
 
@@ -61,6 +66,21 @@ sf2d_texture *tex1;
 //font2 352*54 22*27 cada character
 //3ds screen top resolution 400*240
 //3ds screen bottom resolution 320*240
+extern const struct {
+	unsigned int 	 width;
+	unsigned int 	 height;
+	unsigned int 	 bytes_per_pixel;
+	unsigned char	 pixel_data[];
+} ballon_img;
+
+extern const struct {
+	unsigned int 	 width;
+	unsigned int 	 height;
+	unsigned int 	 bytes_per_pixel;
+	unsigned char	 pixel_data[];
+} cloud_img;
+
+
 extern const struct {
 	unsigned int 	 width;
 	unsigned int 	 height;
@@ -237,28 +257,17 @@ int main()
 	csndInit();//start Audio Lib
 
 	play_state = 1;
-	cat_selected = rand() % 15; //Initiate with a random cat selected
+	cat_selected = rand() % last_cat; //Initiate with a random cat selected
 	last_time = osGetTime(); //get current time
 	last_time2 = osGetTime(); //get current time 2
 
 	
 
 		while (aptMainLoop()) {
+
+			int right_eye = CONFIG_3D_SLIDERSTATE * interaxial;
 			hidScanInput();
 			if (hidKeysDown() & KEY_START) break;
-
-			if (hidKeysDown() & KEY_L){
-				cat_selected = rand() % 15;
-				audio_stop();
-				audio_stop();
-				play_state = 1;
-			}
-			if (hidKeysDown() & KEY_R){
-				cat_selected = rand() % 15;
-				audio_stop();
-				audio_stop();
-				play_state = 1;
-			}
 
 			if (hidKeysDown() & KEY_DUP){
 				audio_stop();
@@ -288,20 +297,50 @@ int main()
 				play_state = 1;
 			}
 			if (hidKeysDown() & KEY_A){
-				cat_selected = rand() % 15;
+				cat_selected = rand() % last_cat;
 				audio_stop();
 				audio_stop();
 				play_state = 1;
 			}
-			if (cat_selected >= 16){
-				cat_selected = 1;
+			if (hidKeysDown() & KEY_X){
+				cat_selected = last_cat;
+				audio_stop();
+				audio_stop();
+				play_state = 1;
+			}
+			if (hidKeysDown() & KEY_Y){
+				cat_selected = first_cat;
+				audio_stop();
+				audio_stop();
+				play_state = 1;
+			}
+			if (cat_selected >= last_cat + 1){
+				cat_selected = first_cat;
 			}
 			if (cat_selected <= 0){
-				cat_selected = 15;
+				cat_selected = last_cat;
 			}
 
 
 			//////////////////////
+
+			//ballon_img
+
+			if (cat_selected == 16 && play_state == 1){
+				sf2d_set_clear_color(RGBA8(0x0F, 0x4D, 0x8F, 0xFF));//Background
+
+				sf2d_free_texture(tex1);
+				sf2d_free_texture(tex2);
+
+
+				tex2 = sf2d_create_texture_mem_RGBA8(ballon_img.pixel_data, ballon_img.width, ballon_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
+				tex1 = sf2d_create_texture_mem_RGBA8(cloud_img.pixel_data, cloud_img.width, cloud_img.height, GPU_RGBA8, SF2D_PLACE_RAM);
+
+
+				audio_load("audio/balloon_raw.bin");
+				play_state = 0;
+			}
+
 			//dub_img
 
 			if (cat_selected == 15 && play_state == 1){
@@ -567,9 +606,6 @@ int main()
 			}
 
 			sf2d_start_frame(GFX_TOP, GFX_LEFT);
-
-
-
 
 
 			if (cat_selected == 1 || cat_selected == 2 || cat_selected == 6 || cat_selected == 8 || cat_selected == 9 || cat_selected == 10 || cat_selected == 14){
@@ -854,7 +890,7 @@ int main()
 						draw_rainbow_dub(rainposx + 15, rainposy - 2, 5, 4, 3, 3, 2, 4);
 
 					}
-					if (rainbow_frame == 13){
+					if (rainbow_frame > 13){
 
 						draw_rainbow_dub(rainposx + 15, rainposy - 2, 4, 6, 5, 2, 4, 1);
 						rainbow_frame = 1;
@@ -885,7 +921,7 @@ int main()
 					if (cat_frame == 6){
 						sf2d_draw_texture_part(tex2, catposx, catposy, 650, 0, 130, 80);
 					}
-					if (cat_frame == 7){
+					if (cat_frame >= 7){
 						sf2d_draw_texture_part(tex2, catposx, catposy, 0, 0, 130, 80);
 
 						cat_frame = 1;
@@ -933,7 +969,7 @@ int main()
 					if (cat_frame == 12){
 						sf2d_draw_texture_part(tex2, catposx, catposy, 650, 0, 130, 80);
 					}
-					if (cat_frame == 13){
+					if (cat_frame >= 13){
 						sf2d_draw_texture_part(tex2, catposx, catposy, 0, 0, 130, 80);
 
 						cat_frame = 1;
@@ -959,16 +995,114 @@ int main()
 					if (cat_frame == 6){
 						sf2d_draw_texture_part(tex2, catposx - 114, catposy, 650, 0, 130, 80);
 					}
-					if (cat_frame == 7){
+					if (cat_frame >= 7){
 						sf2d_draw_texture_part(tex2, catposx - 114, catposy, 0, 0, 130, 80);
 
 						cat_frame = 1;
 					}
 				}
+			//ballon cloud
+			if (cat_selected == 16) {
+				if (star_frame <= 3){
+					sf2d_draw_texture_scale(tex1, 0, -96, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 100, 0, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 250, -96, 1.6, 1.6);//nube derecha
+				}
+				if (star_frame <= 6 && star_frame >= 4){
+					sf2d_draw_texture_scale(tex1, 0, -68, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 100, 28, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 250, -68, 1.6, 1.6);
+				}
+				if (star_frame <= 9 && star_frame >= 7){
+					sf2d_draw_texture_scale(tex1, 0, -40, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 100, 56, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 250, -40, 1.6, 1.6);
+				}
+				if (star_frame <= 12 && star_frame >= 10){
+					sf2d_draw_texture_scale(tex1, 0, -12, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 100, 84, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 250, -12, 1.6, 1.6);
+				}
+				if (star_frame <= 15 && star_frame >= 13){
+					sf2d_draw_texture_scale(tex1, 0, 16, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 100, 112, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 250, 16, 1.6, 1.6);
+				}
+				if (star_frame <= 18 && star_frame >= 16){
+					sf2d_draw_texture_scale(tex1, 0, 44, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 100, 140, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 250, 44, 1.6, 1.6);
+				}
+				if (star_frame <= 21 && star_frame >= 19){
+					sf2d_draw_texture_scale(tex1, 0, 72, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 100, 168, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 250, 72, 1.6, 1.6);
+				}
+				if (star_frame <= 24 && star_frame >= 21){
+					sf2d_draw_texture_scale(tex1, 0, 100, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 100, 196, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 250, 100, 1.6, 1.6);
+				}
+				if (star_frame <= 27 && star_frame >= 24){
+					sf2d_draw_texture_scale(tex1, 0, 128, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 100, 224, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 250, 128, 1.6, 1.6);
+				}
+				if (star_frame <= 30 && star_frame >= 27){
+					sf2d_draw_texture_scale(tex1, 0, 156, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 100, -84, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 250, 156, 1.6, 1.6);
+				}
+				if (star_frame <= 33 && star_frame >= 30){
+					sf2d_draw_texture_scale(tex1, 0, 184, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 100, -56, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 250, 184, 1.6, 1.6);
+				}
+				if (star_frame <= 36 && star_frame >= 33){
+					sf2d_draw_texture_scale(tex1, 0, 212, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 100, -28, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 250, 212, 1.6, 1.6);
+				}
+				if (star_frame >= 37){
+					sf2d_draw_texture_scale(tex1, 0, 212, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 100, 0, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 250, 212, 1.6, 1.6);
+
+					star_frame = 1;
+				}
+			}
+
+			///ballon cat
+			if (cat_selected == 16) {
+				if (cat_frame == 1){
+					sf2d_draw_texture_rotate_cut_scale(tex2, catposx - 50, catposy - 45, 0.0, 0, 0, 66, 130, 1.5, 1.5);
+				}
+				if (cat_frame == 2){
+					sf2d_draw_texture_rotate_cut_scale(tex2, catposx - 50, catposy - 45, 0.0, 66, 0, 66, 130, 1.5, 1.5);
+				}
+				if (cat_frame == 3){
+					sf2d_draw_texture_rotate_cut_scale(tex2, catposx - 50, catposy - 45, 0.0, 132, 0, 66, 130, 1.5, 1.5);
+				}
+				if (cat_frame == 4){
+					sf2d_draw_texture_rotate_cut_scale(tex2, catposx - 50, catposy - 45, 0.0, 198, 0, 66, 130, 1.5, 1.5);
+				}
+				if (cat_frame == 5){
+					sf2d_draw_texture_rotate_cut_scale(tex2, catposx - 50, catposy - 45, 0.0, 264, 0, 66, 130, 1.5, 1.5);
+				}
+				if (cat_frame == 6){
+					sf2d_draw_texture_rotate_cut_scale(tex2, catposx - 50, catposy - 45, 0.0, 330, 0, 66, 130, 1.5, 1.5);
+				}
+				if (cat_frame >= 7){
+					sf2d_draw_texture_rotate_cut_scale(tex2, catposx - 50, catposy - 45, 0.0, 0, 0, 66, 130, 1.5, 1.5);
+
+					cat_frame = 1;
+				}
+			}
 
 
 
-				///stars
+				///STARS///////////////////
+
 
 
 			if (cat_selected == 13) {
@@ -1000,7 +1134,7 @@ int main()
 						sf2d_draw_texture(tex1, star_pos7 + 30, star_pos8);
 					}
 
-					if (star_frame == 5){
+					if (star_frame >= 5){
 						star_frame = 1;
 						star_pos1 = rand() % topx;
 						star_pos2 = rand() % topy;
@@ -1043,7 +1177,7 @@ int main()
 						sf2d_draw_texture_part(tex1, star_pos5 - 15, star_pos6, 42, 0, 14, 14);
 						sf2d_draw_texture_part(tex1, star_pos7 - 15, star_pos8, 42, 0, 14, 14);
 					}
-					if (star_frame == 5){
+					if (star_frame >= 5){
 						star_frame = 1;
 						star_pos1 = rand() % topx;
 						star_pos2 = rand() % topy;
@@ -1058,7 +1192,8 @@ int main()
 
 			sf2d_end_frame();
 
-			///Start GFX_RIGHT EYE
+
+			///Start GFX_RIGHT EYE////
 			sf2d_start_frame(GFX_TOP, GFX_RIGHT);
 
 
@@ -1344,7 +1479,7 @@ int main()
 					draw_rainbow_dub((rainposx + 15) - right_eye, rainposy - 2, 5, 4, 3, 3, 2, 4);
 
 				}
-				if (rainbow_frame == 13){
+				if (rainbow_frame >= 13){
 
 					draw_rainbow_dub((rainposx + 15) - right_eye, rainposy - 2, 4, 6, 5, 2, 4, 1);
 					rainbow_frame = 1;
@@ -1393,7 +1528,7 @@ int main()
 				if (cat_frame == 12){
 					sf2d_draw_texture_part(tex2, catposx - right_eye, catposy, 650, 0, 130, 80);
 				}
-				if (cat_frame == 13){
+				if (cat_frame >= 13){
 					sf2d_draw_texture_part(tex2, catposx - right_eye, catposy, 0, 0, 130, 80);
 
 					cat_frame = 1;
@@ -1419,13 +1554,110 @@ int main()
 				if (cat_frame == 6){
 					sf2d_draw_texture_part(tex2, (catposx - 114) - right_eye, catposy, 650, 0, 130, 80);
 				}
-				if (cat_frame == 7){
+				if (cat_frame >= 7){
 					sf2d_draw_texture_part(tex2, (catposx - 114) - right_eye, catposy, 0, 0, 130, 80);
 
 					cat_frame = 1;
 				}
 			}
 
+			//ballon cloud
+			if (cat_selected == 16) {
+				if (star_frame <= 3){
+					sf2d_draw_texture_scale(tex1, 0, -96, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 100, 0, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 250, -96, 1.6, 1.6);//nube derecha
+				}
+				if (star_frame <= 6 && star_frame >= 4){
+					sf2d_draw_texture_scale(tex1, 0, -68, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 100, 28, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 250, -68, 1.6, 1.6);
+				}
+				if (star_frame <= 9 && star_frame >= 7){
+					sf2d_draw_texture_scale(tex1, 0, -40, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 100, 56, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 250, -40, 1.6, 1.6);
+				}
+				if (star_frame <= 12 && star_frame >= 10){
+					sf2d_draw_texture_scale(tex1, 0, -12, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 100, 84, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 250, -12, 1.6, 1.6);
+				}
+				if (star_frame <= 15 && star_frame >= 13){
+					sf2d_draw_texture_scale(tex1, 0, 16, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 100, 112, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 250, 16, 1.6, 1.6);
+				}
+				if (star_frame <= 18 && star_frame >= 16){
+					sf2d_draw_texture_scale(tex1, 0, 44, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 100, 140, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 250, 44, 1.6, 1.6);
+				}
+				if (star_frame <= 21 && star_frame >= 19){
+					sf2d_draw_texture_scale(tex1, 0, 72, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 100, 168, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 250, 72, 1.6, 1.6);
+				}
+				if (star_frame <= 24 && star_frame >= 21){
+					sf2d_draw_texture_scale(tex1, 0, 100, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 100, 196, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 250, 100, 1.6, 1.6);
+				}
+				if (star_frame <= 27 && star_frame >= 24){
+					sf2d_draw_texture_scale(tex1, 0, 128, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 100, 224, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 250, 128, 1.6, 1.6);
+				}
+				if (star_frame <= 30 && star_frame >= 27){
+					sf2d_draw_texture_scale(tex1, 0, 156, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 100, -84, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 250, 156, 1.6, 1.6);
+				}
+				if (star_frame <= 33 && star_frame >= 30){
+					sf2d_draw_texture_scale(tex1, 0, 184, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 100, -56, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 250, 184, 1.6, 1.6);
+				}
+				if (star_frame <= 36 && star_frame >= 33){
+					sf2d_draw_texture_scale(tex1, 0, 212, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 100, -28, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 250, 212, 1.6, 1.6);
+				}
+				if (star_frame >= 37){
+					sf2d_draw_texture_scale(tex1, 0, 212, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 100, 0, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 250, 212, 1.6, 1.6);
+
+					star_frame = 1;
+				}
+			}
+
+			///ballon cat
+			if (cat_selected == 16) {
+				if (cat_frame == 1){
+					sf2d_draw_texture_rotate_cut_scale(tex2, (catposx - 50) - right_eye, catposy - 45, 0.0, 0, 0, 66, 130, 1.5, 1.5);
+				}
+				if (cat_frame == 2){
+					sf2d_draw_texture_rotate_cut_scale(tex2, (catposx - 50) - right_eye, catposy - 45, 0.0, 66, 0, 66, 130, 1.5, 1.5);
+				}
+				if (cat_frame == 3){
+					sf2d_draw_texture_rotate_cut_scale(tex2, (catposx - 50) - right_eye, catposy - 45, 0.0, 132, 0, 66, 130, 1.5, 1.5);
+				}
+				if (cat_frame == 4){
+					sf2d_draw_texture_rotate_cut_scale(tex2, (catposx - 50) - right_eye, catposy - 45, 0.0, 198, 0, 66, 130, 1.5, 1.5);
+				}
+				if (cat_frame == 5){
+					sf2d_draw_texture_rotate_cut_scale(tex2, (catposx - 50) - right_eye, catposy - 45, 0.0, 264, 0, 66, 130, 1.5, 1.5);
+				}
+				if (cat_frame == 6){
+					sf2d_draw_texture_rotate_cut_scale(tex2, (catposx - 50) - right_eye, catposy - 45, 0.0, 330, 0, 66, 130, 1.5, 1.5);
+				}
+				if (cat_frame >= 7){
+					sf2d_draw_texture_rotate_cut_scale(tex2, (catposx - 50) - right_eye, catposy - 45, 0.0, 0, 0, 66, 130, 1.5, 1.5);
+
+					cat_frame = 1;
+				}
+			}
 
 			//Draw cat normal
 
@@ -1448,7 +1680,7 @@ int main()
 				if (cat_frame == 6){
 					sf2d_draw_texture_part(tex2, catposx - right_eye, catposy, 650, 0, 130, 80);
 				}
-				if (cat_frame == 7){
+				if (cat_frame >= 7){
 					sf2d_draw_texture_part(tex2, catposx - right_eye, catposy, 0, 0, 130, 80);
 
 					cat_frame = 1;
@@ -1490,7 +1722,7 @@ int main()
 					sf2d_draw_texture(tex1, star_pos7 + 30, star_pos8);
 				}
 
-				if (star_frame == 5){
+				if (star_frame >= 5){
 					star_frame = 1;
 					star_pos1 = rand() % topx;
 					star_pos2 = rand() % topy;
@@ -1533,7 +1765,7 @@ int main()
 					sf2d_draw_texture_part(tex1, star_pos5 - 15, star_pos6, 42, 0, 14, 14);
 					sf2d_draw_texture_part(tex1, star_pos7 - 15, star_pos8, 42, 0, 14, 14);
 				}
-				if (star_frame == 5){
+				if (star_frame >= 5){
 					star_frame = 1;
 					star_pos1 = rand() % topx;
 					star_pos2 = rand() % topy;
@@ -1551,7 +1783,75 @@ int main()
 			///BOTTOM SCREEN
 			sf2d_start_frame(GFX_BOTTOM, GFX_LEFT);
 			///stars
+			if (cat_selected == 16) {
+				if (star_frame <= 3){
+					sf2d_draw_texture_scale(tex1, -40, -96, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 60, 0, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 210, -96, 1.6, 1.6);//nube derecha
+				}
+				if (star_frame <= 6 && star_frame >= 4){
+					sf2d_draw_texture_scale(tex1, -40, -68, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 60, 28, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 210, -68, 1.6, 1.6);
+				}
+				if (star_frame <= 9 && star_frame >= 7){
+					sf2d_draw_texture_scale(tex1, -40, -40, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 60, 56, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 210, -40, 1.6, 1.6);
+				}
+				if (star_frame <= 12 && star_frame >= 10){
+					sf2d_draw_texture_scale(tex1, -40, -12, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 60, 84, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 210, -12, 1.6, 1.6);
+				}
+				if (star_frame <= 15 && star_frame >= 13){
+					sf2d_draw_texture_scale(tex1, -40, 16, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 60, 112, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 210, 16, 1.6, 1.6);
+				}
+				if (star_frame <= 18 && star_frame >= 16){
+					sf2d_draw_texture_scale(tex1, -40, 44, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 60, 140, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 210, 44, 1.6, 1.6);
+				}
+				if (star_frame <= 21 && star_frame >= 19){
+					sf2d_draw_texture_scale(tex1, -40, 72, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 60, 168, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 210, 72, 1.6, 1.6);
+				}
+				if (star_frame <= 24 && star_frame >= 21){
+					sf2d_draw_texture_scale(tex1, -40, 100, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 60, 196, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 210, 100, 1.6, 1.6);
+				}
+				if (star_frame <= 27 && star_frame >= 24){
+					sf2d_draw_texture_scale(tex1, -40, 128, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 60, 224, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 210, 128, 1.6, 1.6);
+				}
+				if (star_frame <= 30 && star_frame >= 27){
+					sf2d_draw_texture_scale(tex1, -40, 156, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 60, -84, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 210, 156, 1.6, 1.6);
+				}
+				if (star_frame <= 33 && star_frame >= 30){
+					sf2d_draw_texture_scale(tex1, -40, 184, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 60, -56, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 210, 184, 1.6, 1.6);
+				}
+				if (star_frame <= 36 && star_frame >= 33){
+					sf2d_draw_texture_scale(tex1, -40, 212, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 60, -28, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 210, 212, 1.6, 1.6);
+				}
+				if (star_frame >= 37){
+					sf2d_draw_texture_scale(tex1, -40, 212, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 60, 0, 1.6, 1.6);
+					sf2d_draw_texture_scale(tex1, 210, 212, 1.6, 1.6);
 
+					star_frame = 1;
+				}
+			}
 				if (cat_selected == 13) {
 					if (star_frame == 1){
 						sf2d_draw_texture(tex1, star_pos1, star_pos2);
@@ -1581,7 +1881,7 @@ int main()
 						sf2d_draw_texture(tex1, star_pos7 + 30, star_pos8);
 					}
 
-					if (star_frame == 5){
+					if (star_frame >= 5){
 						star_frame = 1;
 						star_pos1 = rand() % topx;
 						star_pos2 = rand() % topy;
@@ -1624,7 +1924,7 @@ int main()
 						sf2d_draw_texture_part(tex1, star_pos5 - 15, star_pos6, 42, 0, 14, 14);
 						sf2d_draw_texture_part(tex1, star_pos7 - 15, star_pos8, 42, 0, 14, 14);
 					}
-					if (star_frame == 5){
+					if (star_frame >= 5){
 						star_frame = 1;
 						star_pos1 = rand() % topx;
 						star_pos2 = rand() % topy;
