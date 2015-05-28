@@ -79,6 +79,13 @@ Error: New error will loading sound or loading new texture. ( meed to work on it
 4/25/5015 - Added 3D (popping effect) Thanks Technicmaster0 for the guidance.
 
 
+#### Credits
+
+- markwinap
+- Smealum - Ninjhax and CTRULIB
+- Xerpi - sf2dlib
+- WhoAmI? - Biggest supporter
+
 #### Pending
 
     Add more Nyan Cat versions
